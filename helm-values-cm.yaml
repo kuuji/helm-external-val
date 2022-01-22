@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: helm-values
+  namespace: kuuji
+data: 
+  values.yaml: |
+    replicas: "3"
+    deployment:
+      server:
+        replicas: "3"
