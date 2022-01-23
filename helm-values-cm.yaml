@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: helm-values
-  namespace: kuuji
 data: 
   values.yaml: |
     containers:
