@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 )
@@ -27,7 +28,10 @@ func GetK8sClient() Client {
 		// use the current context in kubeconfig
 		config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 		if err != nil {
-			panic(err.Error())
+			config, err = rest.InClusterConfig()
+			if err != nil {
+				panic(err.Error())
+			}
 		}
 
 		// create the clientset
