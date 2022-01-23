@@ -9,6 +9,7 @@ import (
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes/fake"
 	"sigs.k8s.io/yaml"
 )
 
@@ -23,7 +24,7 @@ func TestGetConfigMap(t *testing.T) {
 		want *v1.ConfigMap
 	}{
 		{
-			name: "get",
+			name: "Should fail and log not found",
 			args: args{
 				namespace: "kuuji",
 				name:      "helm-values",
@@ -38,8 +39,10 @@ func TestGetConfigMap(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GetConfigMap(tt.args.namespace, tt.args.name); !reflect.DeepEqual(got.Name, tt.want.Name) {
-				t.Errorf("GetConfigMap() = %v, want %v", got, tt.want)
+			clientset := fake.NewSimpleClientset()
+			_, err := GetConfigMap(tt.args.namespace, tt.args.name, clientset)
+			if err.Error() != "configmaps \"helm-values\" not found" {
+				t.Errorf("Incorrect error message when %q not found", tt.args.name)
 			}
 		})
 	}

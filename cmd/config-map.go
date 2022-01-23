@@ -15,7 +15,7 @@ import (
 	"k8s.io/client-go/util/homedir"
 )
 
-func GetConfigMap(namespace string, name string) *v1.ConfigMap {
+func GetK8sClient() kubernetes.Interface {
 	var kubeconfig *string
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
@@ -33,11 +33,16 @@ func GetConfigMap(namespace string, name string) *v1.ConfigMap {
 	if err != nil {
 		panic(err.Error())
 	}
+	return clientset
+}
+
+func GetConfigMap(namespace string, name string, clientset kubernetes.Interface) (*v1.ConfigMap, error) {
+
 	cm, err := clientset.CoreV1().ConfigMaps(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
-	return cm
+	return cm, nil
 }
 
 func ComposeValues(configmap *v1.ConfigMap) (yaml string) {
