@@ -7,7 +7,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	util "helm-external-val/util/kubernetes"
+	k8s "helm-external-val/util/kubernetes"
 	"os"
 	"strings"
 
@@ -32,13 +32,13 @@ See https://helm.sh/docs/topics/plugins/#downloader-plugins
 			cmd.PrintErrln(err)
 			os.Exit(1)
 		}
-		client := util.GetK8sClient()
-		cm, err := util.GetConfigMap(ns, cmName, client)
+		client := k8s.GetK8sClient()
+		cm, err := k8s.GetConfigMap(ns, cmName, client)
 		if err != nil {
 			cmd.PrintErrln(err)
 			os.Exit(1)
 		}
-		values := util.ComposeValues(cm)
+		values := k8s.ComposeValues(cm)
 		fmt.Printf("%s\n", values)
 	},
 }

@@ -6,7 +6,8 @@ package cmd
 
 import (
 	"fmt"
-	util "helm-external-val/util/kubernetes"
+	util "helm-external-val/util"
+	k8s "helm-external-val/util/kubernetes"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -24,13 +25,13 @@ var cmCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cmName := args[0]
 		fmt.Println("cm called", cmName)
-		client := util.GetK8sClient()
-		cm, err := util.GetConfigMap(kubeNamespace, cmName, client)
+		client := k8s.GetK8sClient()
+		cm, err := k8s.GetConfigMap(kubeNamespace, cmName, client)
 		if err != nil {
 			cmd.PrintErrln(err)
 			os.Exit(1)
 		}
-		values := util.ComposeValues(cm)
+		values := k8s.ComposeValues(cm)
 		util.WriteValuesToFile(values, output)
 		fmt.Printf("%s written to %s\n", cmName, output)
 	},
