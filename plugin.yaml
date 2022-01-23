@@ -8,3 +8,5 @@ downloaders:
 - command: ./helm-external-val downloader
   protocols:
   - "cm"
+hooks:
+  install: "$HELM_PLUGIN_DIR/scripts/install.sh"
