@@ -95,7 +95,7 @@ func TestWriteValuesToFile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			WriteValuesToFile(tt.args.yaml)
+			WriteValuesToFile(tt.args.yaml, "values.yaml")
 			yfile, err := ioutil.ReadFile("values.yaml")
 
 			if err != nil {

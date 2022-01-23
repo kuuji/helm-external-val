@@ -48,8 +48,8 @@ func ComposeValues(configmap *v1.ConfigMap) (yaml string) {
 	return yaml
 }
 
-func WriteValuesToFile(yaml string) {
-	err := ioutil.WriteFile("values.yaml", []byte(yaml), 0600)
+func WriteValuesToFile(yaml string, output string) {
+	err := ioutil.WriteFile(output, []byte(yaml), 0600)
 	if err != nil {
 
 		log.Fatal(err)
