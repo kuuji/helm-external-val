@@ -2,8 +2,8 @@
 
 ## Overview
 
-`helm-external-val` is a helm plugin that allows storing helm values in external source.
-Currently it supports getting values from kubernetes [ConfigMaps](https://kubernetes.io/docs/concepts/configuration/configmap/)
+`helm-external-val` is a helm plugin that fetches helm values from external source.
+Currently it supports getting values from kubernetes [ConfigMaps](https://kubernetes.io/docs/concepts/configuration/configmap/) and kubernetes [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
 
 ## Getting started
 
