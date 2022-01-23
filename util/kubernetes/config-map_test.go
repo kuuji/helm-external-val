@@ -39,8 +39,10 @@ func TestGetConfigMap(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			clientset := fake.NewSimpleClientset()
-			_, err := GetConfigMap(tt.args.namespace, tt.args.name, clientset)
+			client := Client{
+				Clientset: fake.NewSimpleClientset(),
+			}
+			_, err := GetConfigMap(tt.args.namespace, tt.args.name, client)
 			if err.Error() != "configmaps \"helm-values\" not found" {
 				t.Errorf("Incorrect error message when %q not found", tt.args.name)
 			}

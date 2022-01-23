@@ -7,7 +7,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"helm-external-val/util"
+	util "helm-external-val/util/kubernetes"
 	"os"
 	"strings"
 

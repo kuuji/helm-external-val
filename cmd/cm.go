@@ -6,7 +6,7 @@ package cmd
 
 import (
 	"fmt"
-	"helm-external-val/util"
+	util "helm-external-val/util/kubernetes"
 	"os"
 
 	"github.com/spf13/cobra"
