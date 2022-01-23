@@ -16,16 +16,15 @@ import (
 
 // downloaderCmd represents the downloader command
 var downloaderCmd = &cobra.Command{
-	Use:   "downloader",
-	Short: "Get value from remote source and output it to stdout",
-	Long: `Get value from remote source and output it to stdout.
-	URL is formatted like below
-	<protocol>://<namespace>/<name>
+	Use:   "downloader certFile keyFile caFile URL",
+	Short: "Get value from a remote source and output it to stdout",
+	Long: `Get value from a remote source and output it to stdout.
+URL is formatted like below
+<protocol_required>://<namespace_optional>/<name_required>
 
-	For example:
-	cm://kuuji/helm-values 
-	This will get values from a config map named helm-values in the namespace kuuji
-	.`,
+Helm will invoke this command with the url in the 4th parameter.
+See https://helm.sh/docs/topics/plugins/#downloader-plugins
+.`,
 	Args: cobra.ExactArgs(4),
 	Run: func(cmd *cobra.Command, args []string) {
 		_, ns, cmName, err := ParseUrl(args[3])

@@ -31,19 +31,38 @@ This plugin has 2 mode of operation.
 
 The latter is recommended as it fits well with gitops workflows.
 
+
+#### CLI plugin
+
+```
+helm external-val cm -h
+Get the content of values from a cm and write it to a file
+
+Usage:
+  helm-external-val cm <name> [flags]
+
+Flags:
+  -h, --help                    help for cm
+      --kube_namespace string   The namespace to get the cm from (default "default")
+  -o, --out string              The file to output the values to (default "values-cm.yaml")
+```
+
 #### Downloader plugin
 
+Helm will invoke the downloader plugin with 4 parameters `certFile keyFile caFile full-URL`. In our case we're ignoring the first 3.
 
-The url is formatted as follows 
+The url has to be formatted as follows 
 
 ```
 <source>://<namespace>/<name>
 ```
+
+- source (required) : the protocol to use (currently only `cm` is supported)
+- namespace (optional) : the namespace in which to look for the resource (defaults to `default`)
+- name (required) : the name of the resource to fetch
 
 for example the url below will fetch the ConfigMap named `helm-values` from the namespace `kuuji`.
 
 ```
 cm://kuuji/helm-values
 ```
-
-Note: `namespace` is optional, not providing it will default to `default`
