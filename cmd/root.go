@@ -43,10 +43,7 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 		values := util.ComposeValues(cm)
-		util.WriteValuesToFile(values)
-		// cmd.Printf("%s\n", cm.Data["values.yaml"])
-		fmt.Printf("%s\n", cm.Data["values.yaml"])
-		// cmd.Println("test")
+		fmt.Printf("%s\n", values)
 	},
 }
 

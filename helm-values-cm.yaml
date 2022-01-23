@@ -3,10 +3,14 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: helm-values
-  namespace: default
+  namespace: kuuji
 data: 
   values.yaml: |
-    replicas: "3"
-    deployment:
-      server:
-        replicas: "3"
+    containers:
+    - image: "dscr.io/username/mysql"
+      volumeMounts:
+      - containerPath: /var/lib/mysql
+        volume:
+          name: mysql-data
+          subPath: /mysql
+          readOnly: false
