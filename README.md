@@ -23,7 +23,16 @@ TODO
 
 ### Usage
 
+This plugin has 2 mode of operation.
+- Using the plugin cli
+  - Create a values.yaml from various sources
+- As a downloader plugin
+  - Feed a specially formatted url to `helm install|upgrade -f`
+
+The latter is recommended as it fits well with gitops workflows.
+
 #### Downloader plugin
+
 
 The url is formatted as follows 
 
