@@ -5,8 +5,10 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"helm-external-val/util"
 
@@ -19,7 +21,7 @@ var namespace string
 var rootCmd = &cobra.Command{
 	Use:   "helm-external-val config-map-name",
 	Short: "A brief description of your application",
-	Args:  cobra.ExactArgs(1),
+	Args:  cobra.ExactArgs(4),
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
@@ -29,12 +31,45 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
+		_, ns, cmName, err := ParseUrl(args[3])
+		if err != nil {
+			cmd.PrintErrln(err)
+			os.Exit(1)
+		}
 		client := util.GetK8sClient()
-		cm, _ := util.GetConfigMap(namespace, args[0], client)
+		cm, err := util.GetConfigMap(ns, cmName, client)
+		if err != nil {
+			cmd.PrintErrln(err)
+			os.Exit(1)
+		}
 		values := util.ComposeValues(cm)
 		util.WriteValuesToFile(values)
-		fmt.Printf("%s was written to disk", cm.Name)
+		// cmd.Printf("%s\n", cm.Data["values.yaml"])
+		fmt.Printf("%s\n", cm.Data["values.yaml"])
+		// cmd.Println("test")
 	},
+}
+
+func ParseUrl(url string) (protocol string, namespace string, configMapName string, err error) {
+	parsedUrl := strings.Split(url, "://")
+	protocol = parsedUrl[0]
+	err = nil
+	if len(parsedUrl) < 2 {
+		err = errors.New(":// missing after protocol")
+		return
+	}
+	config := strings.Split(parsedUrl[1], "/")
+	if config[0] == "" {
+		err = errors.New("no config provided after protocol")
+		return
+	} else if len(config) == 1 {
+		namespace = "default"
+		configMapName = config[0]
+	} else {
+		namespace = config[0]
+		configMapName = config[1]
+	}
+	return
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -55,5 +90,5 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().StringVarP(&namespace, "namespace", "n", "default", "name of the config map to fetch")
+	// rootCmd.Flags().StringVarP(&namespace, "namespace", "n", "default", "name of the config map to fetch")
 }
