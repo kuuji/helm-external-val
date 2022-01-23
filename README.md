@@ -23,9 +23,11 @@ TODO
 
 ### Usage
 
-This plugin has 2 mode of operation.
+This plugin has 2 modes of operation.
+
 - Using the plugin cli
-  - Create a values.yaml from various sources
+  - Create a values.yaml locally from various sources
+
 - As a downloader plugin
   - Feed a specially formatted url to `helm install|upgrade -f`
 
