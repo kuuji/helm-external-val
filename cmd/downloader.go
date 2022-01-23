@@ -27,20 +27,41 @@ See https://helm.sh/docs/topics/plugins/#downloader-plugins
 .`,
 	Args: cobra.ExactArgs(4),
 	Run: func(cmd *cobra.Command, args []string) {
-		_, ns, cmName, err := ParseUrl(args[3])
+		protocol, ns, name, err := ParseUrl(args[3])
 		if err != nil {
 			cmd.PrintErrln(err)
 			os.Exit(1)
 		}
-		client := k8s.GetK8sClient()
-		cm, err := k8s.GetConfigMap(ns, cmName, client)
-		if err != nil {
-			cmd.PrintErrln(err)
-			os.Exit(1)
+		switch protocol {
+		case "cm":
+			ComposeCM(ns, name, cmd)
+		case "secret":
+			ComposeSecret(ns, name, cmd)
 		}
-		values := k8s.ComposeValues(cm)
-		fmt.Printf("%s\n", values)
+
 	},
+}
+
+func ComposeSecret(ns string, secretName string, cmd *cobra.Command) {
+	client := k8s.GetK8sClient()
+	secret, err := k8s.GetSecret(ns, secretName, client)
+	if err != nil {
+		cmd.PrintErrln(err)
+		os.Exit(1)
+	}
+	values := k8s.ComposeSecretValues(secret)
+	fmt.Printf("%s\n", values)
+}
+
+func ComposeCM(ns string, cmName string, cmd *cobra.Command) {
+	client := k8s.GetK8sClient()
+	cm, err := k8s.GetConfigMap(ns, cmName, client)
+	if err != nil {
+		cmd.PrintErrln(err)
+		os.Exit(1)
+	}
+	values := k8s.ComposeValues(cm)
+	fmt.Printf("%s\n", values)
 }
 
 func ParseUrl(url string) (protocol string, namespace string, configMapName string, err error) {

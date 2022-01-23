@@ -24,7 +24,6 @@ var cmCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cmName := args[0]
-		fmt.Println("cm called", cmName)
 		client := k8s.GetK8sClient()
 		cm, err := k8s.GetConfigMap(kubeNamespace, cmName, client)
 		if err != nil {
