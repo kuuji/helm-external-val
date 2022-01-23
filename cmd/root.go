@@ -15,8 +15,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var namespace string
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "helm-external-val config-map-name",
