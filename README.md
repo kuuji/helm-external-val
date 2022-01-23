@@ -47,6 +47,19 @@ Flags:
   -o, --out string              The file to output the values to (default "values-cm.yaml")
 ```
 
+```
+helm external-val secret -h
+Get the content of values from a secret and write it to a file
+
+Usage:
+  helm-external-val secret <name> [flags]
+
+Flags:
+  -h, --help                    help for secret
+      --kube_namespace string   The namespace to get the secret from (default "default")
+  -o, --out string              The file to output the values to (default "values-secret.yaml")
+```
+
 #### Downloader plugin
 
 Helm will invoke the downloader plugin with 4 parameters `certFile keyFile caFile full-URL`. In our case we're ignoring the first 3.
@@ -57,7 +70,7 @@ The url has to be formatted as follows
 <source>://<namespace>/<name>
 ```
 
-- source (required) : the protocol to use (currently only `cm` is supported)
+- source (required) : the protocol to use (`cm` and `secret` are currently supported)
 - namespace (optional) : the namespace in which to look for the resource (defaults to `default`)
 - name (required) : the name of the resource to fetch
 
