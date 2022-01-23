@@ -1,9 +1,8 @@
-package cmd
+package util
 
 import (
 	"context"
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"path/filepath"
@@ -20,7 +19,6 @@ func GetK8sClient() kubernetes.Interface {
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
 	}
-	flag.Parse()
 
 	// use the current context in kubeconfig
 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
@@ -46,7 +44,6 @@ func GetConfigMap(namespace string, name string, clientset kubernetes.Interface)
 }
 
 func ComposeValues(configmap *v1.ConfigMap) (yaml string) {
-	fmt.Println(configmap.Data["values.yaml"])
 	yaml = configmap.Data["values.yaml"]
 	return yaml
 }

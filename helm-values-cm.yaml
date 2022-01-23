@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: helm-values
-  namespace: kuuji
+  namespace: default
 data: 
   values.yaml: |
     replicas: "3"
