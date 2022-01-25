@@ -28,13 +28,13 @@ func GetK8sClient() Client {
 		// use the current context in kubeconfig
 		config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 		if err != nil {
+			// attempt to use in cluster if failed to get kubeconfig
 			config, err = rest.InClusterConfig()
 			if err != nil {
 				panic(err.Error())
 			}
 		}
 
-		// create the clientset
 		clientset, err := kubernetes.NewForConfig(config)
 		if err != nil {
 			panic(err.Error())

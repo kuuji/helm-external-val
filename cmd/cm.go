@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -16,7 +12,6 @@ import (
 var kubeNamespace string
 var output string
 
-// cmCmd represents the cm command
 var cmCmd = &cobra.Command{
 	Use:   "cm <name>",
 	Short: "Get the content of values from a cm and write it to a file",

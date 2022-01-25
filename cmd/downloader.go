@@ -23,8 +23,7 @@ URL is formatted like below
 <protocol_required>://<namespace_optional>/<name_required>
 
 Helm will invoke this command with the url in the 4th parameter.
-See https://helm.sh/docs/topics/plugins/#downloader-plugins
-.`,
+See https://helm.sh/docs/topics/plugins/#downloader-plugins.`,
 	Args: cobra.ExactArgs(4),
 	Run: func(cmd *cobra.Command, args []string) {
 		protocol, ns, name, err := ParseUrl(args[3])
