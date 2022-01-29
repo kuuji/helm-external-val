@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 PROJECT_NAME="helm-external-val"
 PROJECT_GH="kuuji/$PROJECT_NAME"
