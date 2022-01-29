@@ -82,6 +82,15 @@ repoServer:
       value: /custom-tools/helm-plugins
 ```
 
+### Caveats
+
+ArgoCD won't re-evaluate the external source unless you do a hard refresh on the application. This is because argocd caches the application manifest and won't evaluate the external values since the application manifest didn't change.
+
+You can do this either in the ui (click the arrow under the refresh button) or via the cli like below.
+
+```
+argocd app get <application_name> --hard-refresh
+```
 
 ## Usage
 
