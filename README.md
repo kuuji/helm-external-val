@@ -5,26 +5,78 @@
 `helm-external-val` is a helm plugin that fetches helm values from external source.
 Currently it supports getting values from kubernetes [ConfigMaps](https://kubernetes.io/docs/concepts/configuration/configmap/) and kubernetes [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
 
-## Getting started
+## Installation
 
-### Installation
-
-#### Local
+### Local
 
 ```
 helm plugin install https://github.com/kuuji/helm-external-val
 ```
 
-#### ArgoCD
+### ArgoCD
 
-ArgoCD provides 2 ways of installing helm plugins:
+### Via a custom image
 
-##### Via init container
+The ArgoCD [recommended option](https://argo-cd.readthedocs.io/en/stable/user-guide/helm/#helm-plugins) is to build a repo-server image that includes the plugin.
+See example below
+
+```
+FROM argoproj/argocd:v1.5.7
+
+USER root
+RUN apt-get update && \
+    apt-get install -y \
+        curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+USER argocd
+
+RUN helm plugin install https://github.com/kuuji/helm-external-val
+
+ENV HELM_PLUGINS="/home/argocd/.local/share/helm/plugins/"
+```
+
+### Via init container
+
+Using the helm chart or by patching repo-server we can use an init-container to install helm-external-val in a shared `custom-tools` volume.
+Then we set the helm plugins directory to `/custom-tools/helm-plugins` in the main repo-server container via the env `HELM_PLUGIN`
+Credit to @jkroepke for this neat trick
+
+```
+repoServer:
+  env:
+    - name: HELM_PLUGINS
+      value: /custom-tools/helm-plugins/
+  volumes:
+    - name: custom-tools
+      emptyDir: {}
+  volumeMounts:
+    - mountPath: /custom-tools
+      name: custom-tools
+  initContainers:
+  - name: download-tools
+    args:
+    - |
+      mkdir -p /custom-tools/helm-plugins
+      helm plugin install https://github.com/kuuji/helm-external-val
+    command:
+    - sh
+    - -ec
+    image: alpine/helm:latest
+    imagePullPolicy: Always
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /custom-tools
+      name: custom-tools
+    env:
+    - name: HELM_PLUGINS
+      value: /custom-tools/helm-plugins
+```
 
 
-##### Via a custom image
-
-### Usage
+## Usage
 
 This plugin has 2 modes of operation.
 
@@ -37,7 +89,7 @@ This plugin has 2 modes of operation.
 The latter is recommended as it fits well with gitops workflows.
 
 
-#### CLI plugin
+### CLI plugin
 
 ```
 helm external-val cm -h
@@ -65,7 +117,7 @@ Flags:
   -o, --out string              The file to output the values to (default "values-secret.yaml")
 ```
 
-#### Downloader plugin
+### Downloader plugin
 
 Helm will invoke the downloader plugin with 4 parameters `certFile keyFile caFile full-URL`. In our case we're ignoring the first 3.
 
