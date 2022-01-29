@@ -9,17 +9,20 @@ Currently it supports getting values from kubernetes [ConfigMaps](https://kubern
 
 ### Installation
 
-Local install
+#### Local
 
 ```
-# Clone the project
-# Build the project
-go build
-# Install the plugin
-helm plugin install .
+helm plugin install https://github.com/kuuji/helm-external-val
 ```
 
-TODO
+#### ArgoCD
+
+ArgoCD provides 2 ways of installing helm plugins:
+
+##### Via init container
+
+
+##### Via a custom image
 
 ### Usage
 
