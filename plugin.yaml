@@ -1,5 +1,5 @@
 name: "external-val"
-version: "0.0.2"
+version: "0.0.4"
 usage: "get values from an external source"
 description: "get values from an external source"
 useTunnel: false
