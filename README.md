@@ -13,6 +13,13 @@ Currently it supports getting values from kubernetes [ConfigMaps](https://kubern
 helm plugin install https://github.com/kuuji/helm-external-val
 ```
 
+or by specifying the version (git tag)
+
+```
+helm plugin install --version v0.0.4 https://github.com/kuuji/helm-external-val
+```
+
+
 ### ArgoCD
 
 ### Via a custom image
