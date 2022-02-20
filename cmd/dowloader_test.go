@@ -15,6 +15,7 @@ func TestParseUrl(t *testing.T) {
 		wantProtocol      string
 		wantNamespace     string
 		wantConfigMapName string
+		wantKey           string
 		wantErr           error
 	}{
 		{
@@ -23,6 +24,7 @@ func TestParseUrl(t *testing.T) {
 			wantProtocol:      "cm",
 			wantNamespace:     "default",
 			wantConfigMapName: "helm-values",
+			wantKey:           "values.yaml",
 			wantErr:           nil,
 		},
 		{
@@ -31,6 +33,16 @@ func TestParseUrl(t *testing.T) {
 			wantProtocol:      "cm",
 			wantNamespace:     "kuuji",
 			wantConfigMapName: "helm-values",
+			wantKey:           "values.yaml",
+			wantErr:           nil,
+		},
+		{
+			name:              "Should return namespace and name",
+			args:              args{"cm://kuuji/helm-values/values-key"},
+			wantProtocol:      "cm",
+			wantNamespace:     "kuuji",
+			wantConfigMapName: "helm-values",
+			wantKey:           "values-key",
 			wantErr:           nil,
 		},
 		{
@@ -39,6 +51,7 @@ func TestParseUrl(t *testing.T) {
 			wantProtocol:      "cm",
 			wantNamespace:     "",
 			wantConfigMapName: "",
+			wantKey:           "",
 			wantErr:           errors.New("no config provided after protocol"),
 		},
 		{
@@ -47,12 +60,13 @@ func TestParseUrl(t *testing.T) {
 			wantProtocol:      "weird",
 			wantNamespace:     "",
 			wantConfigMapName: "",
+			wantKey:           "",
 			wantErr:           errors.New(":// missing after protocol"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotProtocol, gotNamespace, gotConfigMapName, err := ParseUrl(tt.args.url)
+			gotProtocol, gotNamespace, gotConfigMapName, gotKey, err := ParseUrl(tt.args.url)
 			if err != nil && errors.Is(err, tt.wantErr) {
 				t.Errorf("ParseUrl() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -64,6 +78,9 @@ func TestParseUrl(t *testing.T) {
 			}
 			if gotConfigMapName != tt.wantConfigMapName {
 				t.Errorf("ParseUrl() gotConfigMapName = %v, want %v", gotConfigMapName, tt.wantConfigMapName)
+			}
+			if gotKey != tt.wantKey {
+				t.Errorf("ParseUrl() gotKey = %v, want %v", gotKey, tt.wantKey)
 			}
 		})
 	}

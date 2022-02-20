@@ -10,6 +10,7 @@ import (
 )
 
 var kubeNamespace string
+var dataKey string
 var output string
 
 var cmCmd = &cobra.Command{
@@ -25,7 +26,7 @@ var cmCmd = &cobra.Command{
 			cmd.PrintErrln(err)
 			os.Exit(1)
 		}
-		values := k8s.ComposeValues(cm)
+		values := k8s.ComposeValues(cm, dataKey)
 		util.WriteValuesToFile(values, output)
 		fmt.Printf("%s written to %s\n", cmName, output)
 	},
@@ -34,5 +35,6 @@ var cmCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(cmCmd)
 	cmCmd.PersistentFlags().StringVar(&kubeNamespace, "kube_namespace", "default", "The namespace to get the cm from")
+	cmCmd.PersistentFlags().StringVar(&dataKey, "dataKey", "dataKey", "The key to get the cm from")
 	cmCmd.PersistentFlags().StringVarP(&output, "out", "o", "values-cm.yaml", "The file to output the values to")
 }

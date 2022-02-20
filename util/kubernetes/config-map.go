@@ -16,7 +16,7 @@ func GetConfigMap(namespace string, name string, client Client) (*v1.ConfigMap, 
 	return cm, nil
 }
 
-func ComposeValues(configmap *v1.ConfigMap) (yaml string) {
-	yaml = configmap.Data["values.yaml"]
+func ComposeValues(configmap *v1.ConfigMap, dataKey string) (yaml string) {
+	yaml = configmap.Data[dataKey]
 	return yaml
 }
