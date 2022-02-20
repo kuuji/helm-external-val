@@ -35,6 +35,6 @@ var cmCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(cmCmd)
 	cmCmd.PersistentFlags().StringVar(&kubeNamespace, "kube_namespace", "default", "The namespace to get the cm from")
-	cmCmd.PersistentFlags().StringVar(&dataKey, "dataKey", "dataKey", "The key to get the cm from")
+	cmCmd.PersistentFlags().StringVar(&dataKey, "dataKey", "values.yaml", "The key to get the data from a cm")
 	cmCmd.PersistentFlags().StringVarP(&output, "out", "o", "values-cm.yaml", "The file to output the values to")
 }
