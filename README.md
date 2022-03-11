@@ -115,6 +115,7 @@ Usage:
   helm-external-val cm <name> [flags]
 
 Flags:
+      --dataKey string          The key to get the cm from (default "values.yaml")
   -h, --help                    help for cm
       --kube_namespace string   The namespace to get the cm from (default "default")
   -o, --out string              The file to output the values to (default "values-cm.yaml")
@@ -128,6 +129,7 @@ Usage:
   helm-external-val secret <name> [flags]
 
 Flags:
+      --dataKey string          The key to get the data from a secret (default "values.yaml")
   -h, --help                    help for secret
       --kube_namespace string   The namespace to get the secret from (default "default")
   -o, --out string              The file to output the values to (default "values-secret.yaml")
@@ -140,15 +142,16 @@ Helm will invoke the downloader plugin with 4 parameters `certFile keyFile caFil
 The url has to be formatted as follows 
 
 ```
-<source>://<namespace>/<name>
+<source>://<namespace>/<name>/<key>
 ```
 
 - source (required) : the protocol to use (`cm` and `secret` are currently supported)
 - namespace (optional) : the namespace in which to look for the resource (defaults to `default`)
 - name (required) : the name of the resource to fetch
+- key (optional) : the key in which to look for the data in the resource (defaults to `values.yaml`)
 
-for example the url below will fetch the ConfigMap named `helm-values` from the namespace `kuuji`.
+for example the url below will fetch the data under `my-values` from ConfigMap named `helm-values` in the namespace `kuuji`.
 
 ```
-cm://kuuji/helm-values
+cm://kuuji/helm-values/my-values
 ```

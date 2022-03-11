@@ -10,6 +10,7 @@ import (
 )
 
 var kubeSecretNamespace string
+var dataSecretKey string
 var secretOutput string
 
 // secretCmd represents the secret command
@@ -26,7 +27,7 @@ var secretCmd = &cobra.Command{
 			cmd.PrintErrln(err)
 			os.Exit(1)
 		}
-		values := k8s.ComposeSecretValues(secret)
+		values := k8s.ComposeSecretValues(secret, dataSecretKey)
 		util.WriteValuesToFile(values, secretOutput)
 		fmt.Printf("%s written to %s\n", secretName, secretOutput)
 	},
@@ -35,5 +36,6 @@ var secretCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(secretCmd)
 	secretCmd.PersistentFlags().StringVar(&kubeSecretNamespace, "kube_namespace", "default", "The namespace to get the secret from")
+	secretCmd.PersistentFlags().StringVar(&dataSecretKey, "dataKey", "values.yaml", "The key to get the data from a secret")
 	secretCmd.PersistentFlags().StringVarP(&secretOutput, "out", "o", "values-secret.yaml", "The file to output the values to")
 }

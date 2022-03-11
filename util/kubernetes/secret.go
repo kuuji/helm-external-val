@@ -16,7 +16,7 @@ func GetSecret(namespace string, name string, client Client) (*v1.Secret, error)
 	return secret, nil
 }
 
-func ComposeSecretValues(secret *v1.Secret) (yaml string) {
-	yaml = string(secret.Data["values.yaml"])
+func ComposeSecretValues(secret *v1.Secret, dataKey string) (yaml string) {
+	yaml = string(secret.Data[dataKey])
 	return yaml
 }

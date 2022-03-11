@@ -49,6 +49,7 @@ func TestGetConfigMap(t *testing.T) {
 func TestComposeValues(t *testing.T) {
 	type args struct {
 		configmap *v1.ConfigMap
+		dataKey string
 	}
 	tests := []struct {
 		name string
@@ -63,13 +64,41 @@ func TestComposeValues(t *testing.T) {
 						"values.yaml": "replicas: \"3\"\ndeployment:\n  server:\n    replicas: \"3\"\n",
 					},
 				},
+				dataKey: "values.yaml",
 			},
 			want: "replicas: \"3\"\ndeployment:\n  server:\n    replicas: \"3\"\n",
+		},
+		{
+			name: "Should create file",
+			args: args{
+				configmap: &v1.ConfigMap{
+					Data: map[string]string{
+						"values.yaml": "replicas: \"3\"\ndeployment:\n  server:\n    replicas: \"3\"\n",
+						"test.yaml": "replicas: \"8\"\ndeployment:\n  server:\n    replicas: \"2\"\n",
+						"ignore.yaml": "replicas: \"20\"\ndeployment:\n  server:\n    replicas: \"11\"\n",
+					},
+				},
+				dataKey: "test.yaml",
+			},
+			want: "replicas: \"8\"\ndeployment:\n  server:\n    replicas: \"2\"\n",
+		},
+		{
+			name: "Should get nothing",
+			args: args{
+				configmap: &v1.ConfigMap{
+					Data: map[string]string{
+						"test.yaml": "replicas: \"8\"\ndeployment:\n  server:\n    replicas: \"2\"\n",
+						"ignore.yaml": "replicas: \"20\"\ndeployment:\n  server:\n    replicas: \"11\"\n",
+					},
+				},
+				dataKey: "values.yaml",
+			},
+			want: "",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ComposeValues(tt.args.configmap); !reflect.DeepEqual(got, tt.want) {
+			if got := ComposeValues(tt.args.configmap, tt.args.dataKey); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetConfigMap() = %v, want %v", got, tt.want)
 			}
 		})
