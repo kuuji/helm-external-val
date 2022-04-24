@@ -1,9 +1,10 @@
-name: CI
+name: build-and-test
 
 env:
   VERSION_GO: '1.17.5'
 
 on:
+  # runs on pull requests and merges to master
   push:
     branches: [ master ]
   pull_request:

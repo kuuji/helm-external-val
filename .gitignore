@@ -1,3 +1,4 @@
 vendor/
 .vscode/
-helm-external-val
+dist/
+helm-external-valdist/
