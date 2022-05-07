@@ -1,3 +1,4 @@
 vendor/
 .vscode/
+dist/
 helm-external-val
