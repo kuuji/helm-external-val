@@ -29,7 +29,7 @@ fi
 # verifySupported checks that the os/arch combination is supported for
 # binary builds.
 verifySupported() {
-  supported="Darwin-x86_64\nLinux-arm64\nLinux-armv6\nLinux-i386\nLinux-x86_64\nWindows-arm64\nWindows-armv6\nWindows-i386\nWindows-x86_64\Darwin-arm64"
+  supported="Darwin-x86_64\nLinux-arm64\nLinux-armv6\nLinux-i386\nLinux-x86_64\nWindows-arm64\nWindows-armv6\nWindows-i386\nWindows-x86_64\nDarwin-arm64"
   if ! echo "${supported}" | grep -q "${OS}-${ARCH}"; then
     echo "No prebuild binary for ${OS}-${ARCH}."
     exit 1
