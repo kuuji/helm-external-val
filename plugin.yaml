@@ -5,7 +5,7 @@ description: "get values from an external source"
 useTunnel: false
 command: $HELM_PLUGIN_DIR/bin/helm-external-val
 downloaders:
-- command: ./helm-external-val downloader
+- command: ./bin/helm-external-val downloader ''
   protocols:
   - "cm"
   - "secret"
