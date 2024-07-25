@@ -3,11 +3,10 @@ version: "0.0.4"
 usage: "get values from an external source"
 description: "get values from an external source"
 useTunnel: false
-command: $HELM_PLUGIN_DIR/bin/helm-external-val
 downloaders:
-- command: ./helm-external-val downloader
-  protocols:
-  - "cm"
-  - "secret"
+  - command: ./bin/helm-external-val downloader dummy
+    protocols:
+      - "cm"
+      - "secret"
 hooks:
   install: "$HELM_PLUGIN_DIR/scripts/install.sh"
